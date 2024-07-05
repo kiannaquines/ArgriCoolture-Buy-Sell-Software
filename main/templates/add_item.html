@@ -1,0 +1,159 @@
+{% extends 'includes/base.html' %}
+{% load static %}
+
+{% block title %}Add Item Page{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <h1 class="h3 mb-3">Add Item Page</h1>
+    <div class="row">
+
+        
+        <div class="col-12">
+
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <div class="alert-message">
+                        {{ message }}
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+            
+            <div class="card">
+                <div class="card-body">
+                    <form action="{% url 'add_item' %}" method="post" class="mt-3" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row mt-3">
+                            <div class="col-md-2">
+                                <span class="fw-bold">{{ form.item_name.label }}</span> <span class="text-danger">*</span>
+                            </div>
+
+                            <div class="col-md-10">
+                                {{ form.item_name }}
+                                <span class="fw-lighter" style="font-size: 10px;">{{ form.item_name.help_text }}</span>
+                            </div>
+                        </div>
+
+
+                        <div class="row mt-3">
+                            <div class="col-md-2">
+                                <span class="fw-bold">{{ form.item_variety.label }}</span> <span class="text-danger">*</span>
+                            </div>
+
+                            <div class="col-md-10">
+                                {{ form.item_variety }}
+                                <span class="fw-lighter" style="font-size: 10px;">{{ form.item_variety.help_text }}</span>
+                            </div>
+                        </div>
+
+
+                        <div class="row mt-3">
+                            <div class="col-md-2">
+                                <span class="fw-bold">{{ form.item_desc.label }}</span> <span class="text-danger">*</span>
+                            </div>
+
+                            <div class="col-md-10">
+                                {{ form.item_desc }}
+                                <span class="fw-lighter" style="font-size: 10px;">{{ form.item_desc.help_text }}</span>
+                            </div>
+                        </div>
+
+
+                        <div class="row mt-3">
+                            <div class="col-md-2">
+                                <span class="fw-bold">{{ form.item_status.label }}</span> <span class="text-danger">*</span>
+                            </div>
+
+                            <div class="col-md-10">
+                                {{ form.item_status }}
+                                <span class="fw-lighter" style="font-size: 10px;">{{ form.item_status.help_text }}</span>
+                            </div>
+                        </div>
+
+
+                        <div class="row mt-3">
+                            <div class="col-md-2">
+                                <span class="fw-bold">{{ form.item_measurement.label }}</span> <span class="text-danger">*</span>
+                            </div>
+
+                            <div class="col-md-10">
+                                {{ form.item_measurement }}
+                                <span class="fw-lighter" style="font-size: 10px;">{{ form.item_measurement.help_text }}</span>
+                            </div>
+                        </div>
+
+
+                        <div class="row mt-3">
+                            <div class="col-md-2">
+                                <span class="fw-bold">{{ form.item_supplier.label }}</span> <span class="text-danger">*</span>
+                            </div>
+
+                            <div class="col-md-10">
+                                {{ form.item_supplier }}
+                                <span class="fw-lighter" style="font-size: 10px;">{{ form.item_supplier.help_text }}</span>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-2">
+                                <span class="fw-bold">{{ form.item_image.label }}</span> <span class="text-danger">*</span>
+                            </div>
+
+                            <div class="col-md-10">
+                                {{ form.item_image }}
+                                <span class="fw-lighter" style="font-size: 10px;">{{ form.item_image.help_text }}</span>
+                            </div>
+                        </div>
+
+
+                        <div class="row mt-3">
+                            <div class="col-md-2">
+                                <span class="fw-bold">{{ form.item_price.label }}</span> <span class="text-danger">*</span>
+                            </div>
+
+                            <div class="col-md-10">
+                                {{ form.item_price }}
+                                <span class="fw-lighter" style="font-size: 10px;">{{ form.item_price.help_text }}</span>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-2">
+                                <span class="fw-bold">{{ form.item_kilo_per_measurement.label }}</span> <span class="text-danger">*</span>
+                            </div>
+
+                            <div class="col-md-10">
+                                {{ form.item_kilo_per_measurement }}
+                                <span class="fw-lighter" style="font-size: 10px;">{{ form.item_kilo_per_measurement.help_text }}</span>
+                            </div>
+                        </div>
+
+
+                        <div class="row mt-3">
+                            <div class="col-md-2">
+                                <span class="fw-bold">{{ form.item_quantity.label }}</span> <span class="text-danger">*</span>
+                            </div>
+
+                            <div class="col-md-10">
+                                {{ form.item_quantity }}
+                                <span class="fw-lighter" style="font-size: 10px;">{{ form.item_quantity.help_text }}</span>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-10">
+                                <input type="submit" value="Save Item Information" class="btn btn-primary btn-lg">
+                                <a href="{% url 'items' %}" class="btn btn-success btn-lg">Back</a>
+                                <input type="reset" value="Reset" class="btn btn-warning btn-lg">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

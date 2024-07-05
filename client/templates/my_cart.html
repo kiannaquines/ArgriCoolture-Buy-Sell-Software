@@ -1,0 +1,103 @@
+{% extends 'includes/base.html' %}
+
+{% block title %}My Cart{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="row mb-2 mb-xl-3">
+        <div class="col-auto d-none d-sm-block">
+            <h1 class="h3 mb-3">My Order Cart Page</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <div class="alert-message">
+                        {{ message }}
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="card">
+
+                <table id="datatables-buttons" class="table table-striped" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Product Order</th>
+                            <th>Quantity</th>
+                            <th>Measurement</th>
+                            <th>Product Price</th>
+                            <th>Product Total</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in cart_data %}
+                        <tr>
+                            <td>{{ product.item.item_name }}</td>
+                            <td>{{ product.order_quantity }}</td>
+                            <td>
+                                <span id="price_per_product" data-priceproduct="{{ product.item_price }}">{{ product.item.item_measurement }}</span>
+                                <small style="font-size: 9px;">{{ product.item_id.item_kilo_per_measurement }}</small>
+                            </td>
+                            <td>{{ product.item.item_price }}</td>
+                            <td>{{ product.total_amount }}</td>
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    <form action="{% url 'my_cart' %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="cart_id" value="{{ product.cart_id }}">
+                                        <button name="delete_my_item" class="btn btn-danger">
+                                            <i data-feather="trash"></i>
+                                        </button>
+                                    </form>
+                                    <a href="{% url 'edit_number_of_order' pk=product.cart_id %}" class="btn btn-success">
+                                        <i data-feather="edit"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>Order Quantity</th>
+                            <th colspan="2" id="order_quantity">{% if order_quantity %} {{ order_quantity }} {% endif %}</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>Grand total</th>
+                            <th colspan="2" id="grand_total">{% if grand_total %} {{ grand_total }} {% endif %}</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="col-auto ms-auto text-end mt-n1">
+                {% if cart_data %}
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        {% for product in cart_data %}
+                        <input type="hidden" name="product_id" value="{{ product.cart_id }}">
+                        <input type="hidden" name="item_id" value="{{ product.item.item_id }}">
+                        {% endfor %}
+
+
+                        <button type="submit" name="checkout_product" class="btn btn-success btn-lg">Checkout Order</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

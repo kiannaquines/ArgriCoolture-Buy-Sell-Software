@@ -1,0 +1,182 @@
+{% extends 'includes/base.html' %}
+{% load static %}
+
+{% block title %}Order Page{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="row mb-2 mb-xl-3">
+        <div class="col-auto d-none d-sm-block">
+            <h1 class="h3 mb-3">Customer Transaction Page</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <div class="alert-message">
+                        {{ message }}
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+            <div class="card">
+                <div class="card-body">
+                    <table id="datatables-buttons" class="table table-striped" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>Order By</th>
+                                <th>Product</th>
+                                <th>Product Price</th>
+                                <th>Quantity</th>
+                                <th>Date Order</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for transaction in transactions %}
+                            <tr>
+                                <td>{{ transaction.transaction_id }}</td>
+                                <td>{{ transaction.user_transaction.first_name }} {{ transaction.user_transaction.last_name }}</td>
+                                <td>{{ transaction.order_product.item_name }}</td>
+                                <td>₱ {{ transaction.amount_per_product }}</td>
+                                <td>{{ transaction.quantity_per_product }}</td>
+                                <td>{{ transaction.date_transaction|date:"m/d/Y" }}</td>
+                                <td class="text-center">
+                                    <div class="btn-group">
+                                        <!-- <button class="btn btn-white btn-md" id="action_view" data-transactionid="{{ transaction.id }}">
+                                            <i data-feather="eye"></i>
+                                        </button> -->
+                                        <a class="btn btn-danger btn-md" href="{% url 'delete_transaction' pk=transaction.id %}">
+                                            <i data-feather="trash" class="text-white"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/datatables.js' %}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+        var datatablesButtons = $("#datatables-buttons").DataTable({
+            responsive: true,
+            lengthChange: !1,
+            buttons: ["copy", "print"]
+        });
+        $('#datatables-buttons_filter input').addClass('form-control-lg');
+        datatablesButtons.buttons().container().appendTo("#datatables-buttons_wrapper .col-md-6:eq(0)");
+    });
+</script>
+<script>
+    $(document).ready(function(){
+
+        $('#datatables-buttons_wrapper .dt-buttons button').addClass('btn-success');
+        $('#datatables-buttons_wrapper .dt-buttons button').addClass('btn-lg');
+        
+        $(document).on("click","#action_view",function(){
+            $("#defaultModalPrimary").modal("show")
+            var parent_element = $("#content_information")
+
+
+            $.ajax({
+                url: "{% url 'transaction' %}",
+                method: "POST",
+                data: {
+                    "transaction_id": $(this).data("transactionid"),
+                    "csrfmiddlewaretoken": "{{ csrf_token }}"
+                },
+                success: function(data){
+                    var content = `
+                    <div class="container">
+                        <div class="alert alert-info alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="alert-message">
+                                <strong>Note:</strong> You are in read only mode, click the button below to edit the information.
+                            </div>
+                        </div>
+
+                        <form>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <span class="fw-bold">Product Ordered</span>
+                                    </div>   
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control form-control-lg" value="${data.product_name}" readonly/>
+                                    </div>     
+                                </div>
+
+                                <div class="row mt-2">
+                                    <div class="col-md-2">
+                                        <span class="fw-bold">Order Quantity</span>
+                                    </div>   
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control form-control-lg" value="${data.quantity}" readonly/>
+                                    </div>    
+                                </div>
+
+
+                                <div class="row mt-2">
+                                    <div class="col-md-2">
+                                        <span class="fw-bold">Order by</span>
+                                    </div>   
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control form-control-lg" value="${data.order_by__first_name} ${data.order_by__last_name}" readonly/>
+                                    </div>    
+                                </div>
+
+                                <div class="row mt-2">
+                                    <div class="col-md-2">
+                                        <span class="fw-bold">Barangay</span>
+                                    </div>   
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control form-control-lg" value="${data.order_by__barangay}" readonly/>
+                                    </div>    
+                                </div>
+
+                                <div class="row mt-2">
+                                    <div class="col-md-2">
+                                        <span class="fw-bold">Postal Code</span>
+                                    </div>   
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control form-control-lg" value="${data.order_by__postal_code}" readonly/>
+                                    </div>    
+                                </div>
+
+
+                                <div class="row mt-2">
+                                    <div class="col-md-2">
+                                        <span class="fw-bold">Contact Number</span>
+                                    </div>   
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control form-control-lg" value="${data.order_by__contact_number}" readonly/>
+                                    </div>    
+                                </div>
+
+                            </div> 
+
+                        </form>
+                    </div>
+                    `;
+
+                    parent_element.html(content)
+                }
+            })
+        });
+    });
+</script>
+{% endblock %}

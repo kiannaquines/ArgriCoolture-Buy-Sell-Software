@@ -1,0 +1,103 @@
+{% extends 'includes/base.html' %}
+{% load static %}
+
+{% block title %}Edit Supplier Page{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <h1 class="h3 mb-3">Edit Supplier Page</h1>
+    <div class="row">
+        <div class="col-12">
+
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <div class="alert-message">
+                        {{ message }}
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+            
+            <div class="card">
+                <div class="card-body">
+                    <form action="{% url 'edit_supplier' pk=supplier_id %}" method="post" class="mt-3">
+                        {% csrf_token %}
+                        <div class="row mt-3">
+                            <div class="col-md-2">
+                                <span class="fw-bold">{{ form.supplier_name.label }}</span> <span class="text-danger">*</span>
+                            </div>
+
+                            <div class="col-md-10">
+                                {{ form.supplier_name }}
+                                <span class="fw-lighter" style="font-size: 10px;">{{ form.supplier_name.help_text }}</span>
+                            </div>
+                        </div>
+
+
+                        <div class="row mt-3">
+                            <div class="col-md-2">
+                                <span class="fw-bold">{{ form.supplier_address.label }}</span> <span class="text-danger">*</span>
+                            </div>
+
+                            <div class="col-md-10">
+                                {{ form.supplier_address }}
+                                <span class="fw-lighter" style="font-size: 10px;">{{ form.supplier_address.help_text }}</span>
+                            </div>
+                        </div>
+
+
+                        <div class="row mt-3">
+                            <div class="col-md-2">
+                                <span class="fw-bold">{{ form.supplier_postal_code.label }}</span> <span class="text-danger">*</span>
+                            </div>
+
+                            <div class="col-md-10">
+                                {{ form.supplier_postal_code }}
+                                <span class="fw-lighter" style="font-size: 10px;">{{ form.supplier_postal_code.help_text }}</span>
+                            </div>
+                        </div>
+
+
+                        <div class="row mt-3">
+                            <div class="col-md-2">
+                                <span class="fw-bold">{{ form.supplier_barangay.label }}</span> <span class="text-danger">*</span>
+                            </div>
+
+                            <div class="col-md-10">
+                                {{ form.supplier_barangay }}
+                                <span class="fw-lighter" style="font-size: 10px;">{{ form.supplier_barangay.help_text }}</span>
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="row mt-3">
+                            <div class="col-md-2">
+                                <span class="fw-bold">{{ form.supplier_mobile_number.label }}</span> <span class="text-danger">*</span>
+                            </div>
+
+                            <div class="col-md-10">
+                                {{ form.supplier_mobile_number }}
+                                <span class="fw-lighter" style="font-size: 10px;">{{ form.supplier_mobile_number.help_text }}</span>
+                            </div>
+                        </div>
+
+
+                        <div class="row mt-3">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-10">
+                                <input type="submit" value="Save Supplier Information" class="btn btn-primary btn-lg">
+                                <a href="{% url 'supplier' %}" class="btn btn-success btn-lg">Back</a>
+                                <input type="reset" value="Reset" class="btn btn-warning btn-lg">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

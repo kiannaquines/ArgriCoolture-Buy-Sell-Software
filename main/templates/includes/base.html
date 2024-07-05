@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    {% block main_css %}
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+	<link rel="shortcut icon" href="{% static 'img/icons/icon-48x48.png' %}" />
+    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+    {% endblock %}
+    {% block extra_css %}{% endblock %}
+</head>
+    <body>
+        <div class="wrapper">
+            {% include 'components/sidebar.html' %}
+            <div class="main">
+                {% include 'components/navbar.html' %}
+                <main class="content">
+                    {% block content %}{% endblock %}
+
+                    {% include 'components/modal.html' %}
+                </main>
+                {% include 'components/footer.html' %}
+            </div>
+        </div>
+        {% block main_js %}
+        <script src="{% static 'js/app.js' %}"></script>
+        {% endblock %}
+        {% block extra_js %}{% endblock %}
+    </body>
+</html>

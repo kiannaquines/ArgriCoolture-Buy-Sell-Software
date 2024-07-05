@@ -1,0 +1,25 @@
+<ul class="sidebar-nav">
+    <li class="sidebar-header">
+        Client Module
+    </li>
+
+    <li class="sidebar-item {% if products_path == request.path %} {{ 'active' }} {% endif %}">
+        <a class="sidebar-link" href="{% url 'products' %}">
+            <i class="align-middle" data-feather="box"></i> <span class="align-middle">Products</span>
+        </a>
+    </li>
+    
+    <li class="sidebar-item {% if orders_path == request.path %} {{ 'active' }} {% endif %}">
+        <a class="sidebar-link" href="{% url 'my_order' %}">
+            <i class="align-middle" data-feather="box"></i> <span class="align-middle">Order History</span>
+        </a>
+    </li>
+
+    <li class="sidebar-item {% if cart_path == request.path %} {{ 'active' }} {% endif %}">
+        <a class="sidebar-link" href="{% url 'my_cart' %}">
+            <i class="align-middle" data-feather="shopping-cart"></i> <span class="align-middle">Chart</span>
+        </a>
+    </li>
+
+   
+</ul>

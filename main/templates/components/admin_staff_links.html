@@ -1,0 +1,66 @@
+<ul class="sidebar-nav">
+    <li class="sidebar-header">
+        Dashboard
+    </li>
+    
+    
+    <li class="sidebar-item {% if dashboard_path == request.path %} {{ 'active' }} {% endif %}">
+        <a class="sidebar-link" href="{% url 'dashboard' %}">
+            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+        </a>
+    </li>
+
+    <li class="sidebar-header">
+        Manage Farmer & Trader
+    </li>
+    
+    <li class="sidebar-item {% if farmer_path == request.path %} {{ 'active' }} {% endif %}">
+        <a class="sidebar-link" href="{% url 'farmer' %}">
+            <i class="align-middle" data-feather="box"></i> <span class="align-middle">Farmer</span>
+        </a>
+    </li>
+
+    <li class="sidebar-item {% if trader_path == request.path %} {{ 'active' }} {% endif %}">
+        <a class="sidebar-link" href="{% url 'trader' %}">
+            <i class="align-middle" data-feather="box"></i> <span class="align-middle">Trader</span>
+        </a>
+    </li>
+
+    <li class="sidebar-header">
+        Manage Supplier
+    </li>
+
+    <li class="sidebar-item {% if supplier_path == request.path %} {{ 'active' }} {% endif %}">
+        <a class="sidebar-link" href="{% url 'supplier' %}">
+            <i class="align-middle" data-feather="box"></i> <span class="align-middle">Supplier</span>
+        </a>
+    </li>
+
+    <li class="sidebar-header">
+        Manage Products
+    </li>
+
+    <li class="sidebar-item {% if items_path == request.path %} {{ 'active' }} {% endif %}">
+        <a class="sidebar-link" href="{% url 'items' %}">
+            <i class="align-middle" data-feather="box"></i> <span class="align-middle">Items</span>
+        </a>
+    </li>
+
+
+    <li class="sidebar-header">
+        Manage Orders
+    </li>
+
+    <li class="sidebar-item {% if order_path == request.path %} {{ 'active' }} {% endif %}">
+        <a class="sidebar-link" href="{% url 'transaction' %}">
+            <i class="align-middle" data-feather="box"></i> <span class="align-middle">Customer Transactions</span>
+        </a>
+    </li>
+
+    <li class="sidebar-item {% if cart_path == request.path %} {{ 'active' }} {% endif %}">
+        <a class="sidebar-link" href="{% url 'cart' %}">
+            <i class="align-middle" data-feather="box"></i> <span class="align-middle">Customer Cart</span>
+        </a>
+    </li>
+
+</ul>

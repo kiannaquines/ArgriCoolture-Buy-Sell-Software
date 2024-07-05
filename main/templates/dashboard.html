@@ -1,0 +1,191 @@
+{% extends 'includes/base.html' %}
+
+{% block title %}Dashboard Page{% endblock %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <h1 class="h3 mb-3">Dashboard</h1>
+
+    <div class="row">
+        <div class="col-xl-12 col-xxl-12 col-md-12 col-sm-12 d-flex">
+            <div class="w-100">
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col mt-0">
+                                        <h5 class="card-title">Orders</h5>
+                                    </div>
+                        
+                                    <div class="col-auto">
+                                        <div class="stat text-primary">
+                                            <i class="align-middle" data-feather="truck" style="font-size: 5em;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h1 class="mt-1 mb-3">{{ order_count }}</h1>
+                                <div class="mb-0">
+                                    <span class="text-muted">
+                                        <a href="{% url 'transaction' %}" style="text-decoration: none;">More Information</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col mt-0">
+                                        <h5 class="card-title">Farmers</h5>
+                                    </div>
+
+                                    <div class="col-auto">
+                                        <div class="stat text-primary">
+                                            <i class="align-middle" data-feather="users"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h1 class="mt-1 mb-3">{{ farmer_count }}</h1>
+                                <div class="mb-0">
+                                    <span class="text-muted">
+                                        <a href="{% url 'farmer' %}" style="text-decoration: none;">More Information</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col mt-0">
+                                        <h5 class="card-title">Traders</h5>
+                                    </div>
+
+                                    <div class="col-auto">
+                                        <div class="stat text-primary">
+                                            <i class="align-middle" data-feather="user"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h1 class="mt-1 mb-3">{{ trader_count }}</h1>
+                                <div class="mb-0">
+                                    <span class="text-muted">
+                                        <a href="{% url 'trader' %}" style="text-decoration: none;">More Information</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col mt-0">
+                                        <h5 class="card-title">Stock Sold</h5>
+                                    </div>
+
+                                    <div class="col-auto">
+                                        <div class="stat text-primary">
+                                            <i class="align-middle" data-feather="shopping-cart"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h1 class="mt-1 mb-3">{{ stock_sold }}</h1>
+                                <div class="mb-0">
+                                    <span class="text-muted">
+                                        <a href="{% url 'items' %}" style="text-decoration: none;">More Information</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col mt-0">
+                                        <h5 class="card-title">Supplier</h5>
+                                    </div>
+
+                                    <div class="col-auto">
+                                        <div class="stat text-primary">
+                                            <i class="align-middle" data-feather="truck"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h1 class="mt-1 mb-3">{{ supplier_count }}</h1>
+                                <div class="mb-0">
+                                    <span class="text-muted">
+                                        <a href="{% url 'supplier' %}" style="text-decoration: none;">More Information</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col mt-0">
+                                        <h5 class="card-title">Total Stock</h5>
+                                    </div>
+
+                                    <div class="col-auto">
+                                        <div class="stat text-primary">
+                                            <i class="align-middle" data-feather="users"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h1 class="mt-1 mb-3">{{ total_stock }}</h1>
+                                <div class="mb-0">
+                                    <span class="text-muted">
+                                        <a href="{% url 'items' %}" style="text-decoration: none;">More Information</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-12 col-lg-12 col-xxl-12 d-flex">
+            <div class="card flex-fill">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Customer Orders</h5>
+                </div>
+                <table class="table table-hover my-0">
+                    <thead>
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>Order by</th>
+                            <th class="d-none d-xl-table-cell">Product Order</th>
+                            <th>Product Status</th>
+                            <th class="d-none d-md-table-cell">Date Ordered</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <td>{{ order.transaction_id }}</td>
+                            <td>{{ order.user_transaction.first_name }} {{ order.user_transaction.last_name }}</td>
+                            <td class="d-none d-xl-table-cell">{{ order.order_product.item_name }}</td>
+                            <td><span class="badge bg-success">{{ order.order_product.item_status }}</span></td>
+                            <td class="d-none d-md-table-cell">{{ order.date_transaction | date:"m/d/Y" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+
+{% block extra_js%}
+
+{% endblock %}

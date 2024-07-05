@@ -1,0 +1,214 @@
+{% extends 'includes/base.html' %}
+{% load static %}
+
+{% block title %}Supplier Page{% endblock %}
+ 
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="row mb-2 mb-xl-3">
+        <div class="col-auto d-none d-sm-block">
+            <h1 class="h3 mb-3">Traders Page</h1>
+        </div>
+
+        <div class="col-auto ms-auto text-end mt-n1">
+            <a href="{% url 'add_trader' %}" class="btn btn-primary btn-lg">Add Trader</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <div class="alert-message">
+                        {{ message }}
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+            
+            
+            <div class="card">
+                <div class="card-body">
+                    <table id="datatables-buttons" class="table table-striped" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Trader</th>
+                                <th>Postal Code</th>
+                                <th>Barangay</th>
+                                <th>Address</th>
+                                <th>Mobile Number</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for trader_list in trader_lists %}
+                            <tr>
+                                <td>{{ trader_list.first_name }} {{ trader_list.last_name }}</td>
+                                <td>{{ trader_list.postal_code }}</td>
+                                <td>{{ trader_list.barangay }}</td>
+                                <td>{{ trader_list.address }}</td>
+                                <td>{{ trader_list.contact_number }}</td>
+                                <td class="text-center">
+                                    <div class="btn-group">
+                                        <!-- <button class="btn btn-white btn-md" id="action_view" data-traderid="{{ trader_list.id }}">
+                                            <i data-feather="eye"></i>
+                                        </button> -->
+                                        <a class="btn btn-danger btn-md" href="{% url 'delete_trader' pk=trader_list.id %}">
+                                            <i data-feather="trash"></i>
+                                        </a>
+                                        <a class="btn btn-success btn-md" href="{% url 'edit_trader' pk=trader_list.id %}">
+                                            <i data-feather="edit"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/datatables.js' %}"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+        var datatablesButtons = $("#datatables-buttons").DataTable({
+            dom: 'Bfrtip',
+            responsive: true,
+            lengthChange: !1,
+            buttons: ["copy", "print",'excel', 'pdf']
+        });
+
+        $('#datatables-buttons_filter input').addClass('form-control-lg');
+        $('#datatables-buttons_wrapper .dt-buttons button').addClass('btn-success');
+        $('#datatables-buttons_wrapper .dt-buttons button').addClass('btn-lg');
+        datatablesButtons.buttons().container().appendTo("#datatables-buttons_wrapper .col-md-6:eq(0)");
+    });
+</script>
+<script>
+    $(document).ready(function(){
+        $(document).on("click","#action_view",function(){
+            $("#defaultModalPrimary").modal("show")
+            var parent_element = $("#content_information")
+
+
+            $.ajax({
+                url: "{% url 'trader' %}",
+                method: "POST",
+                data: {
+                    "trader_id": $(this).data("traderid"),
+                    "csrfmiddlewaretoken": "{{ csrf_token }}"
+                },
+                success: function(data){
+                    var content = `
+                    <div class="container">
+                        <div class="alert alert-info alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="alert-message">
+                                <strong>Note:</strong> You are in read only mode, click the button below to edit the information.
+                            </div>
+                        </div>
+
+                        <form>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <span class="fw-bold">Firstname</span>
+                                    </div>   
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control form-control-lg" value="${data.first_name}" readonly/>
+                                    </div>     
+                                </div>
+
+                                <div class="row mt-2">
+                                    <div class="col-md-2">
+                                        <span class="fw-bold">Lastname</span>
+                                    </div>   
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control form-control-lg" value="${data.last_name}" readonly/>
+                                    </div>    
+                                </div>
+
+
+                                <div class="row mt-2">
+                                    <div class="col-md-2">
+                                        <span class="fw-bold">Username</span>
+                                    </div>   
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control form-control-lg" value="${data.username}" readonly/>
+                                    </div>    
+                                </div>
+
+
+                                <div class="row mt-2">
+                                    <div class="col-md-2">
+                                        <span class="fw-bold">User type</span>
+                                    </div>   
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control form-control-lg" value="${data.user_type}" readonly/>
+                                    </div>    
+                                </div>
+
+
+                                <div class="row mt-2">
+                                    <div class="col-md-2">
+                                        <span class="fw-bold">Contact Number</span>
+                                    </div>   
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control form-control-lg" value="${data.contact_number}" readonly/>
+                                    </div>    
+                                </div>
+
+
+
+                                <div class="row mt-2">
+                                    <div class="col-md-2">
+                                        <span class="fw-bold">Barangay</span>
+                                    </div>   
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control form-control-lg" value="${data.barangay}" readonly/>
+                                    </div>    
+                                </div>
+
+
+                                <div class="row mt-2">
+                                    <div class="col-md-2">
+                                        <span class="fw-bold">Address</span>
+                                    </div>   
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control form-control-lg" value="${data.address}" readonly/>
+                                    </div>    
+                                </div>
+
+
+
+                                <div class="row mt-2">
+                                    <div class="col-md-2">
+                                        <span class="fw-bold">Postal Code</span>
+                                    </div>   
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control form-control-lg" value="${data.postal_code}" readonly/>
+                                    </div>    
+                                </div>
+                            </div> 
+
+                        </form>
+                    </div>
+                    `;
+
+                    parent_element.html(content)
+                }
+            })
+        });
+    });
+</script>
+{% endblock %}

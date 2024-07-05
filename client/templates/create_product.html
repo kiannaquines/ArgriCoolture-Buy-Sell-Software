@@ -1,0 +1,44 @@
+{% extends 'includes/base.html' %}
+
+{% block title %}Create Product{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="row mb-2 mb-xl-3">
+        <div class="col-auto d-none d-sm-block">
+            <h1 class="h3 mb-3">Create Product Page</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-success alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="alert-message">
+                                {{ message }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form action="{% url 'create_product' %}" enctype="multipart/form-data" method="post">
+                        {% csrf_token %}
+                        {{ form.as_p  }}
+
+                        <div class="form-group">
+                            <input type="submit" value="Create Product" class="btn btn-primary btn-lg">
+                            <input type="reset" value="Reset Value" class="btn btn-warning btn-lg">
+                            <a href="{% url 'products' %}" class="btn btn-danger btn-lg">Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

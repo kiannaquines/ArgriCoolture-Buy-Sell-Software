@@ -1,0 +1,176 @@
+{% extends 'includes/base.html' %}
+
+{% block title %}Cart Page{% endblock %}
+{% load static %}
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="row mb-2 mb-xl-3">
+        <div class="col-auto d-none d-sm-block">
+            <h1 class="h3 mb-3">Customer Cart Page</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <table id="datatables-buttons" class="table table-striped" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Order By</th>
+                                <th>Item Ordered</th>
+                                <th>Item Quantity</th>
+                                <th>Item Price</th>
+                                <th>Date Added</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cart_list in cart_lists %}
+                            <tr>
+                                <td>{{ cart_list.user.first_name }} {{ cart_list.user.last_name }}</td>
+                                <td>
+                                    {{ cart_list.item.item_name }}
+                                </td>
+                                <td>
+                                    {{ cart_list.order_quantity }}
+                                </td>
+                                <td>
+                                    ₱ {{ cart_list.item.item_price }}
+                                </td>
+                                <td>{{ cart_list.date_ordered|date:"m/d/Y" }}</td>
+                                <td class="text-center">
+                                    <div class="btn-group">
+                                        <a class="btn btn-danger btn-md" href="{% url 'delete_cart' pk=cart_list.cart_id %}">
+                                            <i data-feather="trash" class="text-white"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/datatables.js' %}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+        var datatablesButtons = $("#datatables-buttons").DataTable({
+            responsive: true,
+            lengthChange: !1,
+            buttons: [
+            {
+                extend: 'copy',
+            },
+            {
+                extend: 'print',
+                customize: function(win) {
+                    $(win.document.body).find('th:contains("Action")').hide();
+                    $(win.document.body).find('td:contains("Action")').hide();
+                }
+            }
+        ]
+        });
+
+        $('#datatables-buttons_filter input').addClass('form-control-lg');
+        datatablesButtons.buttons().container().appendTo("#datatables-buttons_wrapper .col-md-6:eq(0)");
+    });
+</script>
+<script>
+    $(document).ready(function(){
+
+        $('#datatables-buttons_wrapper .dt-buttons button').addClass('btn-success');
+        $('#datatables-buttons_wrapper .dt-buttons button').addClass('btn-lg');
+        
+        $(document).on("click","#action_view",function(){
+            $("#defaultModalPrimary").modal("show")
+            var parent_element = $("#content_information")
+
+
+            $.ajax({
+                url: "{% url 'items' %}",
+                method: "POST",
+                data: {
+                    "item_id": $(this).data("itemid"),
+                    "csrfmiddlewaretoken": "{{ csrf_token }}"
+                },
+                success: function(data){
+                    var content = `
+                    <div class="container">
+                        <div class="alert alert-info alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="alert-message">
+                                <strong>Note:</strong> You are in read only mode, click the button below to edit the information.
+                            </div>
+                        </div>
+
+                        <form>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <span class="fw-bold">Item Name</span>
+                                    </div>   
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control form-control-lg" value="${data.item_name}" readonly/>
+                                    </div>     
+                                </div>
+
+                                <div class="row mt-2">
+                                    <div class="col-md-2">
+                                        <span class="fw-bold">Item Description</span>
+                                    </div>   
+                                    <div class="col-md-10">
+                                        <textarea type="text" class="form-control form-control-lg" rows="6" readonly>${data.item_desc}</textarea>
+                                    </div>    
+                                </div>
+
+                                <div class="row mt-2">
+                                    <div class="col-md-2">
+                                        <span class="fw-bold">Quantity</span>
+                                    </div>   
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control form-control-lg" value="${data.item_quantity}" readonly/>
+                                    </div>    
+                                </div>
+
+                            
+
+                                <div class="row mt-2">
+                                    <div class="col-md-2">
+                                        <span class="fw-bold">Item Status</span>
+                                    </div>   
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control form-control-lg" value="${data.item_status}" readonly/>
+                                    </div>    
+                                </div>
+
+
+                                <div class="row mt-2">
+                                    <div class="col-md-2">
+                                        <span class="fw-bold">Date Added</span>
+                                    </div>   
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control form-control-lg" value="${data.item_date_added}" readonly/>
+                                    </div>    
+                                </div>
+
+                            </div> 
+
+                        </form>
+                    </div>
+                    `;
+
+                    parent_element.html(content)
+                }
+            })
+        });
+    });
+</script>
+{% endblock %}

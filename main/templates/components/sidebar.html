@@ -1,0 +1,15 @@
+<nav id="sidebar" class="sidebar js-sidebar">
+    <div class="sidebar-content js-simplebar">
+        <a class="sidebar-brand" href="{% url 'dashboard' %}">
+            <span class="align-middle">Lition's Agri Buy & Sell</span>
+            <br>
+            <span class="text-sm">Information Management System</span>
+        </a>
+        
+        {% if request.user.is_staff and request.user.is_superuser %}
+            {% include 'components/admin_staff_links.html' %}
+        {% else %}
+            {% include 'components/client_links.html' %}
+        {% endif %}
+    </div>
+</nav>

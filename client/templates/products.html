@@ -1,0 +1,63 @@
+{% extends 'includes/base.html' %}
+{% load static %}
+{% block title %}Products{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/card.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <div class="row mb-2 mb-xl-3">
+        <div class="col-auto d-none d-sm-block">
+            <h1 class="h3 mb-3">Product Page</h1>
+        </div>
+
+        <div class="col-auto ms-auto text-end mt-n1">
+            <a href="{% url 'create_product' %}" class="btn btn-primary btn-lg">Sell Product</a>
+        </div>
+    </div>
+
+    {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-success alert-dismissible" role="alert">
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          <div class="alert-message">
+              {{ message }}
+          </div>
+      </div>
+      {% endfor %}
+  {% endif %}
+
+    <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-3">
+        {% for product in products %}
+        <div class="col">
+            <div class="card h-90 shadow-sm">
+                <img src="{{ product.item_image.url }}" class="card-img-top" alt="{{ product.item_name }}" />
+              <div class="card-body">
+                <div class="clearfix mb-3">
+                  <span class="float-start badge rounded-pill bg-info">₱ {{ product.item_price }}</span>
+                  <span class="float-end"><a href="#" class="small text-muted text-uppercase aff-link">in {{ product.item_measurement }}</a></span>
+                </div>
+                <h5 class="card-title">
+                  <a target="_blank" href="#" class="lead" style="text-transform: uppercase; font-size: 13px; text-align: justify;">
+                        {{ product.item_name }} | Measurement {{ product.item_measurement }} | {{ product.item_kilo_per_measurement }} per kg
+                  </a>
+                </h5>
+                <div class="d-grid my-4">
+                  <form action="{% url 'products' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="product_id" value="{{ product.item_id }}">
+                    <button type="submit" class="btn btn-primary text-white bold-btn rounded-pill w-100">ADD TO CART</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+        </div>
+        {% endfor %}
+        
+
+    </div>
+</div>
+{% endblock %}
